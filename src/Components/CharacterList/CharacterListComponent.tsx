@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import CharacterCardComponent from "../Shared/CharacterCardComponent/CharacterCardComponent";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../Store/Reducers";
@@ -9,22 +9,20 @@ const CharacterListComponent = () => {
 
   const {characterReducer: {characters}} = useSelector((state: RootState) => state);
 
-  useEffect(()=>console.log(characters),[characters]);
-
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleCharacterDetail = (character:any) => {
+  const handleCharacterDetail = (character: any) => {
     dispatch(CharacterActions.setCharacterDetail(character));
-    console.log(character);
     history.push(`character/?id=${character.id}`);
+    console.log(character);
   };
 
-  return(
+  return (
     <div className="d-flex flex-wrap my-4 justify-content-around">
-      {characters?.map((character:any,index:number)=>{
+      {characters?.map((character: any, index: number) => {
         return <CharacterCardComponent handleSelect={handleCharacterDetail}
-                                       character={character} index={index} />
+                                       character={character} index={index}/>
       })}
     </div>
   );

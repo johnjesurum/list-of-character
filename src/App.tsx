@@ -18,7 +18,6 @@ const App = () => {
 
   const {characterReducer: {characters}} = useSelector((state: RootState) => state);
 
-
   return (
     <Router>
       {!characters.length && <LinearProgressComponent/>}

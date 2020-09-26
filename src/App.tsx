@@ -1,26 +1,38 @@
-import React from "react";
-import logo from "./logo.svg";
+import React, {useEffect} from "react";
+import {HashRouter as Router, Redirect, Route, Switch} from "react-router-dom";
 import "./App.scss";
+import {useDispatch, useSelector} from "react-redux";
+import {CharacterActions} from "./Store/Characters/Slice";
+import CharacterListComponent from "./Components/CharacterList/CharacterListComponent";
+import {RootState} from "./Store/Reducers";
+import LinearProgressComponent from "./Components/Shared/LinearProgressComponent";
+import CharacterDetailComponent from "./Components/CharacterDetailComponent/CharacterDetailComponent";
 
-function App() {
+const App = () => {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(CharacterActions.getCharacters());
+  }, [dispatch]);
+
+  const {characterReducer: {characters}} = useSelector((state: RootState) => state);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      {!characters.length && <LinearProgressComponent/>}
+      <Switch>
+        <Route exact path="/characters">
+          <CharacterListComponent/>
+        </Route>
+        <Route exact path="/character">
+          <CharacterDetailComponent/>
+        </Route>
+        <Redirect from="*" to="/characters"/>
+      </Switch>
+    </Router>
   );
-}
+};
 
 export default App;
